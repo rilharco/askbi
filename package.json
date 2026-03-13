@@ -1,0 +1,27 @@
+{
+  "name": "shotokan-platform",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/api"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,magenta \"npm --workspace apps/web run dev\" \"npm --workspace apps/api run start:dev\"",
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:api": "npm --workspace apps/api run start:dev",
+    "build:web": "npm --workspace apps/web run build",
+    "build:api": "npm --workspace apps/api run build",
+    "lint:web": "npm --workspace apps/web run lint",
+    "lint:api": "npm --workspace apps/api run lint"
+  },
+  "devDependencies": {
+    "concurrently": "8.2.2"
+  },
+  "overrides": {
+    "@nestjs/common": "10.3.8",
+    "@nestjs/core": "10.3.8",
+    "@nestjs/platform-express": "10.3.8",
+    "@nestjs/jwt": "10.2.0",
+    "@nestjs/passport": "10.0.3"
+  }
+}

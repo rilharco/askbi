@@ -1,0 +1,8 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "npm run build && npm run prisma:generate && npm run prisma:migrate && node dist/main.js"
+  }
+}

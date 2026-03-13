@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id                String             @id @default(uuid())
+  email             String             @unique
+  fullName          String
+  isInstructor      Boolean            @default(false)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  rankHistory       MemberRankHistory[]
+  exams             Exam[]             @relation("ExamParticipants")
+}
+
+model User {
+  id                 String   @id @default(uuid())
+  email              String   @unique
+  name               String?
+  passwordHash       String
+  role               String   @default("user")
+  onboardingComplete Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  flows              Flow[]
+  templates          Template[]
+}
+
+model BeltRank {
+  id          String   @id @default(uuid())
+  name        String
+  order       Int
+  colorHex    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rankHistory MemberRankHistory[]
+  exams       Exam[]
+
+  @@unique([order])
+}
+
+model Exam {
+  id          String     @id @default(uuid())
+  title       String
+  date        DateTime
+  location    String?
+  beltRankId  String
+  beltRank    BeltRank   @relation(fields: [beltRankId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  participants Member[] @relation("ExamParticipants")
+}
+
+model MemberRankHistory {
+  id          String   @id @default(uuid())
+  memberId    String
+  beltRankId  String
+  achievedAt  DateTime
+  notes       String?
+
+  member      Member   @relation(fields: [memberId], references: [id])
+  beltRank    BeltRank @relation(fields: [beltRankId], references: [id])
+
+  @@index([memberId])
+  @@index([beltRankId])
+}
+
+model Flow {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String   @default("draft")
+  version     Int      @default(1)
+  steps       Json
+  ownerId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User     @relation(fields: [ownerId], references: [id])
+  runs        FlowRun[]
+}
+
+model FlowRun {
+  id         String   @id @default(uuid())
+  flowId     String
+  status     String
+  input      Json
+  output     Json?
+  logs       Json?
+  startedAt  DateTime @default(now())
+  finishedAt DateTime?
+
+  flow       Flow     @relation(fields: [flowId], references: [id])
+
+  @@index([flowId])
+}
+
+model Template {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  status      String   @default("draft")
+  content     Json
+  submittedAt DateTime?
+  ownerId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User     @relation(fields: [ownerId], references: [id])
+
+  @@index([ownerId])
+}

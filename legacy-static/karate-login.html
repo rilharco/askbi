@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shotokan — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Work+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --tight: 0;
+      --logo-offset-y: -100px;
+      --card-offset-y: 18px;
+      --bg: #0b0b0d;
+      --ink: #0f0f12;
+      --white: #f6f4f1;
+      --gold: #f1c232;
+      --red: #c0161d;
+      --red-dark: #8f1116;
+      --card: rgba(10, 10, 12, 0.78);
+      --border: rgba(255, 255, 255, 0.12);
+      --ease: 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Work Sans', sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(192, 22, 29, 0.25), transparent 55%),
+        radial-gradient(circle at 50% 75%, rgba(241, 194, 50, 0.15), transparent 60%);
+      pointer-events: none;
+      opacity: calc(0.25 + var(--tight) * 0.55);
+      transition: opacity 0.6s ease;
+    }
+
+    .scene {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      gap: 26px;
+      padding: 24px;
+      padding-top: 8px;
+    }
+
+    .main {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      transform: translateY(-36px);
+    }
+
+    .brand {
+      text-align: center;
+      opacity: calc(0.45 + var(--tight) * 0.55);
+      transform: translateY(calc(10px - var(--tight) * 10px));
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .brand h1 {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.08em;
+      font-size: clamp(40px, 3.4vw, 38px);
+      text-transform: uppercase;
+    }
+
+    .brand p {
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(246, 244, 241, 0.65);
+      margin-top: 6px;
+    }
+
+    .belt-wrap {
+      position: relative;
+      width: min(360px, 92vw);
+      height: 260px;
+      display: grid;
+      place-items: center;
+      transform: translateY(var(--logo-offset-y));
+    }
+
+    .logo-shell {
+      position: relative;
+      width: min(300px, 70vw);
+      height: auto;
+      cursor: grab;
+      display: grid;
+      place-items: center;
+      touch-action: none;
+      transform: translateX(var(--logo-x, 0px));
+      transition: transform 0.12s ease;
+    }
+
+    .logo-shell:active {
+      cursor: grabbing;
+    }
+
+    .logo-shell.is-dragging {
+      transition: none;
+    }
+
+    .logo-shell.is-animating {
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .logo {
+      width: 100%;
+      height: auto;
+      transform-origin: 50% 50%;
+      transform: scale(1);
+      transition: transform 0.12s ease;
+      filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.65));
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .belt-grip {
+      position: absolute;
+      bottom: -14px;
+      width: calc(120px + var(--tight) * 40px);
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #151515, #272727 45%, #151515);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.6);
+      display: grid;
+      place-items: center;
+      letter-spacing: 0.18em;
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      color: rgba(246, 244, 241, 0.6);
+      opacity: calc(0.95 - var(--tight) * 0.55);
+      transition: opacity 0.2s ease, width 0.2s ease;
+      pointer-events: none;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 8px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(246, 244, 241, 0.6);
+      opacity: calc(1 - var(--tight) * 0.85);
+      transition: opacity 0.4s ease;
+    }
+
+    .card {
+      width: min(360px, 92vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px 24px 22px;
+      opacity: var(--tight);
+      transform:
+        translateY(calc(-50% + var(--logo-offset-y) + var(--card-offset-y) + 18px - var(--tight) * 18px)) translateX(calc(30px - var(--tight) * 30px)) scale(calc(0.95 + var(--tight) * 0.05));
+      transition:
+        opacity var(--ease),
+        transform var(--ease),
+        box-shadow var(--ease),
+        border-color var(--ease);
+      pointer-events: none;
+      box-shadow: 0 20px 46px rgba(0, 0, 0, 0.6);
+      position: absolute;
+      top: 50%;
+      left: calc(35% + 250px);
+    }
+
+    .card.is-active {
+      pointer-events: auto;
+      border-color: rgba(241, 194, 50, 0.35);
+      box-shadow:
+        0 22px 56px rgba(0, 0, 0, 0.7),
+        0 0 36px rgba(241, 194, 50, 0.12);
+    }
+
+    .card h2 {
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 0.78rem;
+      color: rgba(246, 244, 241, 0.7);
+      margin-bottom: 16px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(246, 244, 241, 0.55);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    input:focus {
+      border-color: rgba(241, 194, 50, 0.6);
+      box-shadow: 0 0 0 3px rgba(241, 194, 50, 0.18);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 26px rgba(192, 22, 29, 0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(192, 22, 29, 0.45);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    @media (max-width: 900px) {
+      .main {
+        gap: 22px;
+      }
+
+      .belt-wrap {}
+
+      .card {
+        position: static;
+        transform:
+          translateY(calc(18px - var(--tight) * 18px)) scale(calc(0.95 + var(--tight) * 0.05));
+        left: auto;
+        top: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scene">
+    <div class="brand">
+      <h1>Associação Shotokan</h1>
+      <p>Beira Interior</p>
+    </div>
+
+    <div class="main">
+      <div class="belt-wrap">
+        <div class="logo-shell" id="js-belt">
+          <img class="logo" id="js-logo" src="assets/logo.svg" alt="Associação Shotokan Karate-Do" />
+        </div>
+      </div>
+
+      <div class="card" id="js-card">
+        <h2>Login</h2>
+        <p>Entra com as tuas credenciais.</p>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="tu@exemplo.com" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="••••••••" />
+        </div>
+        <button class="btn" type="button">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ROOT = document.documentElement;
+    const belt = document.getElementById('js-belt');
+    const card = document.getElementById('js-card');
+    const logo = document.getElementById('js-logo');
+
+    const MAX_PULL = 160;
+    let dragging = false;
+    let opened = false;
+    let animTimer = null;
+    let curPull = 0;
+    let startX = 0;
+    let startPull = 0;
+
+    function setPull(pull) {
+      curPull = Math.max(0, Math.min(MAX_PULL, pull));
+      const tight = curPull / MAX_PULL;
+      ROOT.style.setProperty('--tight', tight.toFixed(3));
+      ROOT.style.setProperty('--logo-x', `${-curPull}px`);
+      card.classList.toggle('is-active', tight > 0.6);
+    }
+
+    function onDown(e) {
+      dragging = true;
+      belt.classList.add('is-dragging');
+      startX = e.clientX;
+      startPull = curPull;
+      belt.setPointerCapture(e.pointerId);
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      const pull = Math.max(0, Math.min(MAX_PULL, startPull - dx));
+      setPull(pull);
+    }
+
+    function onUp(e) {
+      if (!dragging) return;
+      dragging = false;
+      belt.classList.remove('is-dragging');
+      belt.releasePointerCapture(e.pointerId);
+      opened = false;
+      smoothTo(0);
+    }
+
+    function smoothTo(target) {
+      belt.classList.add('is-animating');
+      setPull(target);
+      if (animTimer) clearTimeout(animTimer);
+      animTimer = setTimeout(() => {
+        belt.classList.remove('is-animating');
+      }, 650);
+    }
+
+    belt.addEventListener('pointerdown', onDown);
+    belt.addEventListener('pointermove', onMove);
+    belt.addEventListener('pointerup', onUp);
+    belt.addEventListener('pointerleave', onUp);
+    belt.addEventListener('dblclick', () => {
+      opened = !opened;
+      smoothTo(opened ? MAX_PULL : 0);
+    });
+
+    setPull(0);
+  </script>
+</body>
+
+</html>
