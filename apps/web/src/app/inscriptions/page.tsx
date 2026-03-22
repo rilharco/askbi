@@ -25,9 +25,8 @@ export default function InscriptionsPage() {
           <a className="btn reveal" data-delay="240" href="/classes">Ver horários</a>
           <a className="btn reveal" data-delay="300" href="/contact">Falar connosco</a>
         </div>
-        <div className="hero-media mesh parallax" data-parallax="0.08"></div>
-        <div className="hero-visual parallax" data-parallax="0.16">
-          <img src="/assets/belt-curve.svg" alt="" />
+        <div className="hero-media mesh parallax" data-parallax="0.08">
+          <img src="/assets/hero-ink.svg" alt="" className="hero-ink-img" />
         </div>
       </section>
 

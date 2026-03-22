@@ -6,9 +6,9 @@ export class ExamsService {
   constructor(private readonly prisma: PrismaService) {}
 
   list() {
-    return this.prisma.exam.findMany({
-      include: { beltRank: true, participants: true },
-      orderBy: { date: 'desc' }
+    return this.prisma.exame.findMany({
+      include: { graduacoes: true },
+      orderBy: { data: 'desc' },
     });
   }
 }

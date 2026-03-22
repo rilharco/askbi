@@ -6,8 +6,11 @@ export class MembersService {
   constructor(private readonly prisma: PrismaService) {}
 
   list() {
-    return this.prisma.member.findMany({
-      include: { rankHistory: { include: { beltRank: true } } }
+    // Legacy: Member was replaced by Atleta in the new schema
+    return this.prisma.atleta.findMany({
+      where: { ativo: true },
+      include: { graduacoes: { orderBy: { data: 'desc' }, take: 1 } },
+      orderBy: { nome: 'asc' },
     });
   }
 }

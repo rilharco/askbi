@@ -6,6 +6,7 @@ export class BeltsService {
   constructor(private readonly prisma: PrismaService) {}
 
   list() {
-    return this.prisma.beltRank.findMany({ orderBy: { order: 'asc' } });
+    // Legacy: BeltRank was replaced by Graduacao in the new schema
+    return this.prisma.graduacao.findMany({ orderBy: { data: 'desc' }, take: 50 });
   }
 }

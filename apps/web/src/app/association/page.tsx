@@ -12,9 +12,8 @@ export default function AssociationPage() {
           <a className="btn primary reveal" data-delay="240" href="/inscriptions">Junta‑te a nós</a>
           <a className="btn reveal" data-delay="300" href="/classes">Aulas e horários</a>
         </div>
-        <div className="hero-media mesh parallax" data-parallax="0.08"></div>
-        <div className="hero-visual parallax" data-parallax="0.16">
-          <img src="/assets/dojo-grid.svg" alt="" />
+        <div className="hero-media mesh parallax" data-parallax="0.08">
+          <img src="/assets/hero-ink.svg" alt="" className="hero-ink-img" />
         </div>
       </section>
 
@@ -46,17 +45,17 @@ export default function AssociationPage() {
         </div>
         <div className="grid-3">
           <div className="card reveal">
-            <span className="card-icon">🧭</span>
+            <span className="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="24" height="24"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg></span>
             <h3>Caráter</h3>
             <p>Desenvolvimento pessoal com responsabilidade e perseverança. O Karate molda não apenas o corpo, mas quem somos dentro e fora do tatami.</p>
           </div>
           <div className="card reveal">
-            <span className="card-icon">🙏</span>
+            <span className="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="24" height="24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
             <h3>Respeito</h3>
             <p>Relação equilibrada entre instrutores, colegas e comunidade. O respeito é o primeiro e último gesto de cada sessão — começa e termina com rei.</p>
           </div>
           <div className="card reveal">
-            <span className="card-icon">🧘</span>
+            <span className="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="24" height="24"><circle cx="12" cy="4" r="2"/><path d="M12 7v5m-4 3c1.333 1 2.667 1.5 4 1.5s2.667-.5 4-1.5M8 15c-2 .5-3 1.8-3 3.5M16 15c2 .5 3 1.8 3 3.5"/></svg></span>
             <h3>Autocontrolo</h3>
             <p>Treino de corpo e mente para decisões mais conscientes. A capacidade de se conter é tão importante como a técnica que se domina.</p>
           </div>

@@ -36,9 +36,8 @@ export default function NewsPage() {
         <p className="reveal" data-delay="160">
           Atualizações do dojo, resultados de competições, graduações e próximos eventos. Mantém‑te a par de tudo.
         </p>
-        <div className="hero-media mesh parallax" data-parallax="0.08"></div>
-        <div className="hero-visual parallax" data-parallax="0.16">
-          <img src="/assets/brush-stroke.svg" alt="" />
+        <div className="hero-media mesh parallax" data-parallax="0.08">
+          <img src="/assets/hero-ink.svg" alt="" className="hero-ink-img" />
         </div>
       </section>
 

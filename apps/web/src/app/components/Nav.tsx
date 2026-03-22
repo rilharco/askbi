@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const links = [
   { href: '/', label: 'Início' },
@@ -19,21 +19,61 @@ const links = [
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close drawer on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
-    <header className={open ? 'nav-open' : ''}>
+    <header className={[open ? 'nav-open' : '', scrolled ? 'scrolled' : ''].filter(Boolean).join(' ')}>
       <div className="nav">
-        <div className="brand">
-          <img src="/assets/logo.svg" alt="Logo Associação Shotokan" />
+        {/* Brand */}
+        <Link href="/" className="brand" style={{ textDecoration: 'none' }}>
+          <div style={{
+            width: 44,
+            height: 44,
+            borderRadius: '50%',
+            overflow: 'hidden',
+            border: '1.5px solid rgba(201,21,30,0.5)',
+            flexShrink: 0,
+            boxShadow: '0 0 14px rgba(201,21,30,0.18)',
+          }}>
+            <img
+              src="/assets/logo-assoc.png"
+              alt="Logo Associação Shotokan"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
           <div>
             <h1>Associação Shotokan</h1>
             <span>Beira Interior</span>
           </div>
-        </div>
-        <button className="nav-toggle" type="button" aria-label="Abrir menu" onClick={() => setOpen(!open)}>
-          <span></span><span></span><span></span>
+        </Link>
+
+        {/* Hamburger toggle — visible on mobile */}
+        <button
+          className="nav-toggle"
+          type="button"
+          aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span />
+          <span />
+          <span />
         </button>
-        <nav className="nav-links">
+
+        {/* Navigation links */}
+        <nav className="nav-links" aria-label="Navegação principal">
           <ul>
             {links.map((link) => {
               const active = pathname === link.href;
@@ -42,12 +82,11 @@ export default function Nav() {
                 <li key={link.href}>
                   <Link
                     className={[
-                      active ? 'is-active' : '',
+                      active && !isInscrever ? 'is-active' : '',
                       isInscrever ? 'btn primary' : '',
                     ].filter(Boolean).join(' ')}
                     href={link.href}
-                    onClick={() => setOpen(false)}
-                    style={isInscrever ? { fontSize: '0.62rem', padding: '7px 12px' } : undefined}
+                    style={isInscrever ? { fontSize: '0.66rem', padding: '8px 14px', marginLeft: 4 } : undefined}
                   >
                     {link.label}
                   </Link>

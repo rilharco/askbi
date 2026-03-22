@@ -21,9 +21,8 @@ export default function ContactPage() {
         <p className="reveal" data-delay="160">
           Fala connosco para inscrições, horários ou qualquer informação sobre o dojo. Respondemos com brevidade.
         </p>
-        <div className="hero-media mesh parallax" data-parallax="0.08"></div>
-        <div className="hero-visual parallax" data-parallax="0.16">
-          <img src="/assets/dojo-grid.svg" alt="" />
+        <div className="hero-media mesh parallax" data-parallax="0.08">
+          <img src="/assets/hero-ink.svg" alt="" className="hero-ink-img" />
         </div>
       </section>
 
@@ -91,19 +90,19 @@ export default function ContactPage() {
             <h3>Informações</h3>
             <div style={{ marginTop: 12 }}>
               <div className="contact-list-item">
-                <span className="contact-list-icon">📍</span>
+                <span className="contact-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="16" height="16"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
                 <span>Rua do Dojo, 12 — Covilhã<br /><span style={{ fontSize: '0.7rem', opacity: 0.6 }}>Beira Interior, Portugal</span></span>
               </div>
               <div className="contact-list-item">
-                <span className="contact-list-icon">✉️</span>
+                <span className="contact-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="16" height="16"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></span>
                 <span>contacto@shotokan.pt</span>
               </div>
               <div className="contact-list-item">
-                <span className="contact-list-icon">📞</span>
+                <span className="contact-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="16" height="16"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></span>
                 <span>+351 900 000 000</span>
               </div>
               <div className="contact-list-item">
-                <span className="contact-list-icon">🕐</span>
+                <span className="contact-list-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
                 <span>Segunda a Sexta<br /><span style={{ fontSize: '0.7rem', opacity: 0.6 }}>18:00 – 22:00</span></span>
               </div>
             </div>

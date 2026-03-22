@@ -16,7 +16,7 @@ export default function HomePage() {
     <>
       {/* ── Hero ───────────────────────────────── */}
       <section className="hero section-bg bg-ember">
-        <div className="hero-kanji" aria-hidden="true">空手道</div>
+        <div className="hero-kanji" aria-hidden="true">始める</div>
         <div className="section-watermark" aria-hidden="true">01</div>
         <div className="eyebrow reveal" data-delay="0">Associação Shotokan · Beira Interior</div>
         <h2 className="reveal" data-delay="80">
@@ -47,18 +47,9 @@ export default function HomePage() {
             <div className="stat-label">Turmas semanais</div>
           </div>
         </div>
-        <div className="hero-media mesh parallax" data-parallax="0.08"></div>
-        <div className="hero-visual parallax" data-parallax="0.18">
-          <img src="/assets/hero-ink.svg" alt="" />
+        <div className="hero-media mesh parallax" data-parallax="0.08">
+          <img src="/assets/hero-ink.svg" alt="" className="hero-ink-img" />
         </div>
-        <img
-          className="parallax reveal"
-          data-delay="360"
-          data-parallax="0.12"
-          src="/assets/logo.svg"
-          alt="Emblema Associação Shotokan"
-          style={{ width: 160, opacity: 0.9 }}
-        />
       </section>
 
       {/* ── Visão ──────────────────────────────── */}
@@ -70,17 +61,29 @@ export default function HomePage() {
         </div>
         <div className="grid-3">
           <div className="card reveal">
-            <span className="card-icon">⛩️</span>
+            <span className="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M3 21h18M3 7l9-4 9 4M4 7v14M20 7v14M9 21v-6h6v6"/>
+              </svg>
+            </span>
             <h3>Tradição</h3>
             <p>Estilo Shotokan com base nos fundamentos clássicos do Karate‑Do e na filosofia do dojo. Raízes profundas, prática consistente.</p>
           </div>
           <div className="card reveal">
-            <span className="card-icon">🤝</span>
+            <span className="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </span>
             <h3>Comunidade</h3>
             <p>Uma associação para partilha, respeito e crescimento coletivo. Um espaço onde todos se apoiam e evoluem juntos.</p>
           </div>
           <div className="card reveal">
-            <span className="card-icon">🥋</span>
+            <span className="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
+            </span>
             <h3>Progressão</h3>
             <p>Planos de treino por níveis, com acompanhamento próximo e exames regulares de graduação para cada praticante.</p>
           </div>
@@ -96,17 +99,30 @@ export default function HomePage() {
         </div>
         <div className="grid-3">
           <div className="card reveal">
-            <span className="card-icon">🎯</span>
+            <span className="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>
+              </svg>
+            </span>
             <h3>Rigor técnico</h3>
             <p>Metodologia estruturada com progressão por níveis — Kihon, Kata e Kumite desenvolvidos com precisão e consistência.</p>
           </div>
           <div className="card reveal">
-            <span className="card-icon">🛡️</span>
+            <span className="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </span>
             <h3>Ambiente seguro</h3>
             <p>Treinos supervisionados com atenção individual a cada praticante, desde os mais jovens aos mais avançados.</p>
           </div>
           <div className="card reveal">
-            <span className="card-icon">🏆</span>
+            <span className="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M8 21h8m-4-4v4M5 3H3v6c0 3.314 4.03 6 9 6s9-2.686 9-6V3h-2M5 3h14M5 3V1M19 3V1"/>
+              </svg>
+            </span>
             <h3>Resultados</h3>
             <p>Preparação física e mental para objetivos pessoais, competição ou simplesmente uma prática de vida saudável.</p>
           </div>
@@ -170,7 +186,7 @@ export default function HomePage() {
           <div className="section-title">Plataforma</div>
           <div className="subtle">Gestão interna</div>
         </div>
-        <p className="reveal" style={{ maxWidth: 560, marginBottom: 8, color: 'rgba(246,244,241,0.65)', fontSize: '0.88rem', lineHeight: 1.7 }}>
+        <p className="reveal" style={{ maxWidth: 560, marginBottom: 8, color: 'rgba(246,244,241,0.62)', fontSize: '0.9rem', lineHeight: 1.75 }}>
           Uma plataforma exclusiva para instrutores — gestão de membros, acompanhamento de progressão, agendamento de exames e muito mais.
         </p>
         <div className="pp-coming-badge reveal" style={{ marginBottom: 20 }}>
@@ -179,22 +195,40 @@ export default function HomePage() {
         </div>
         <div className="feature-grid reveal" style={{ marginBottom: 28 }}>
           <div className="feature-item">
-            <div className="feature-icon">👥</div>
+            <div className="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197L15 21z"/>
+              </svg>
+            </div>
             <div className="feature-title">Gestão de membros</div>
             <div className="feature-desc">Fichas completas com histórico de graduações, presença e evolução técnica.</div>
           </div>
           <div className="feature-item">
-            <div className="feature-icon">🥋</div>
+            <div className="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="2" y="9" width="20" height="6" rx="1"/>
+                <path d="M12 9v6m-4-6v6m8-6v6"/>
+              </svg>
+            </div>
             <div className="feature-title">Graduações</div>
             <div className="feature-desc">Registo de cintos, datas de exame e critérios de progressão por nível.</div>
           </div>
           <div className="feature-item">
-            <div className="feature-icon">📅</div>
+            <div className="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+              </svg>
+            </div>
             <div className="feature-title">Exames</div>
             <div className="feature-desc">Agendamento, inscrição de alunos e registo de resultados em cada exame.</div>
           </div>
           <div className="feature-item">
-            <div className="feature-icon">📊</div>
+            <div className="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
             <div className="feature-title">Dashboard</div>
             <div className="feature-desc">Visão geral da associação — estatísticas, alertas e atividade recente.</div>
           </div>
