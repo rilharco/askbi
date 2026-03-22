@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,7 +36,8 @@
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       overflow-x: hidden;
@@ -119,7 +121,8 @@
       transition: color 0.2s ease, background 0.2s ease;
     }
 
-    nav a:hover, nav a.is-active {
+    nav a:hover,
+    nav a.is-active {
       color: #fff;
       background: rgba(255, 255, 255, 0.08);
     }
@@ -264,8 +267,13 @@
       transition: transform 0.12s ease;
     }
 
-    .logo-shell.is-dragging { transition: none; }
-    .logo-shell.is-animating { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+    .logo-shell.is-dragging {
+      transition: none;
+    }
+
+    .logo-shell.is-animating {
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
     .logo-shell img {
       width: 100%;
@@ -283,9 +291,7 @@
       padding: 22px 20px 20px;
       opacity: var(--reveal);
       transform:
-        translateY(calc(-50% + var(--logo-offset-y) + var(--card-offset-y) + 12px - var(--reveal) * 18px))
-        translateX(calc(30px - var(--reveal) * 30px))
-        scale(calc(0.95 + var(--reveal) * 0.05));
+        translateY(calc(-50% + var(--logo-offset-y) + var(--card-offset-y) + 12px - var(--reveal) * 18px)) translateX(calc(30px - var(--reveal) * 30px)) scale(calc(0.95 + var(--reveal) * 0.05));
       transition:
         opacity var(--ease),
         transform var(--ease),
@@ -377,8 +383,7 @@
       .login-card {
         position: static;
         transform:
-          translateY(calc(10px - var(--reveal) * 10px))
-          scale(calc(0.95 + var(--reveal) * 0.05));
+          translateY(calc(10px - var(--reveal) * 10px)) scale(calc(0.95 + var(--reveal) * 0.05));
         left: auto;
         top: auto;
         margin-top: 16px;
@@ -386,11 +391,12 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="nav">
       <div class="brand">
-        <img src="assets/logo.svg" alt="Logo Associação Shotokan" />
+        <img src="assets/logo-assoc.png" alt="Logo Associação Shotokan" />
         <div>
           <h1>Associação Shotokan</h1>
           <span>Beira Interior</span>
@@ -413,7 +419,8 @@
   <main>
     <section id="home" class="hero">
       <h2 class="reveal">Disciplina, respeito e evolução</h2>
-      <p class="reveal">Treino tradicional de Karate-Do com foco em técnica, saúde e crescimento pessoal. Para todas as idades e níveis.</p>
+      <p class="reveal">Treino tradicional de Karate-Do com foco em técnica, saúde e crescimento pessoal. Para todas as
+        idades e níveis.</p>
       <div class="cta-row">
         <a class="btn primary reveal" href="#classes">Ver horários</a>
         <a class="btn reveal" href="#instructors">Conhecer instrutores</a>
@@ -472,7 +479,7 @@
 
         <div class="login-stage reveal">
           <div class="logo-shell" id="js-belt">
-            <img src="assets/logo.svg" alt="Associação Shotokan Karate-Do" />
+            <img src="assets/logo-assoc.png" alt="Associação Shotokan Karate-Do" />
           </div>
           <div class="login-card" id="js-card">
             <h3>Login</h3>
@@ -623,9 +630,10 @@
           entry.target.classList.add('is-visible');
         }
       });
-    }, { threshold: 0.2 });
+    }, {threshold: 0.2});
 
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
   </script>
 </body>
+
 </html>

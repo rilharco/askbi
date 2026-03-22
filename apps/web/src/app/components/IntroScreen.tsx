@@ -31,7 +31,7 @@ export default function IntroScreen() {
       <div className="intro-bg-grid" />
       <div className="intro-content">
         <div className="intro-logo">
-          <img src="/assets/logo.svg" alt="" />
+          <img src="/assets/logo-assoc.png" alt="" />
         </div>
         <div className="intro-name">Associação Shotokan</div>
         <div className="intro-sub">Karate‑Do · Beira Interior</div>

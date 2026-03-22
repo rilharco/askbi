@@ -7,72 +7,495 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Member {
-  id                String             @id @default(uuid())
-  email             String             @unique
-  fullName          String
-  isInstructor      Boolean            @default(false)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-
-  rankHistory       MemberRankHistory[]
-  exams             Exam[]             @relation("ExamParticipants")
-}
+// ─── Auth ────────────────────────────────────────────────────────
 
 model User {
   id                 String   @id @default(uuid())
   email              String   @unique
   name               String?
   passwordHash       String
-  role               String   @default("user")
+  role               String   @default("user") // admin | presidente | treinador
   onboardingComplete Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  flows              Flow[]
-  templates          Template[]
+  flows     Flow[]
+  templates Template[]
 }
 
-model BeltRank {
+// ─── M1 — Associação e Clubes ────────────────────────────────────
+
+model Associacao {
+  id        String   @id @default(uuid())
+  nome      String
+  regiao    String
+  morada    String?
+  codigoPostal String?
+  localidade   String?
+  email     String?
+  telefone  String?
+  site      String?
+  logoUrl   String?
+  nipc      String?
+  ibam      String?  // IBAN conta bancária
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  clubes      Clube[]
+  competicoes Competicao[]
+  noticias    Noticia[]
+  exames      Exame[]
+}
+
+model Clube {
+  id           String   @id @default(uuid())
+  assocId      String
+  nome         String
+  nipc         String?  @unique
+  morada       String?
+  codigoPostal String?
+  localidade   String?
+  email        String?
+  telefone     String?
+  site         String?
+  presidente   String?
+  secretario   String?
+  tesoureiro   String?
+  logoUrl      String?
+  filiacaoNum  String   @unique
+  estado       String   @default("Afiliado") // Afiliado | Suspenso | Extinto
+  filiadoDesde Int?
+  quotaEstado  String   @default("Pendente") // Pago | Pendente | EmAtraso | Isento
+  iban         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  assoc        Associacao       @relation(fields: [assocId], references: [id])
+  atletas      Atleta[]
+  treinadores  TreinadorClube[]
+  pagamentos   Pagamento[]
+  documentos   DocumentoClube[]
+  presencas    Presenca[]
+
+  @@index([assocId])
+}
+
+// ─── M2 — Atletas e Graduações ───────────────────────────────────
+
+model Atleta {
+  id           String    @id @default(uuid())
+  clubeId      String
+  // Dados pessoais
+  nome         String
+  dataNasc     DateTime?
+  numCC        String?   // Nº Cartão de Cidadão
+  validadeCC   DateTime?
+  nif          String?
+  // Contacto
+  email        String?
+  telefone     String?
+  morada       String?
+  codigoPostal String?
+  localidade   String?
+  // Encarregado de educação (para menores)
+  encarregadoNome  String?
+  encarregadoEmail String?
+  encarregadoTel   String?
+  encarregadoCC    String?
+  // Desportivo
+  numFiliacao  String    @unique
+  escalao      String?
+  kyuAtual     Int       @default(9)
+  danAtual     Int       @default(0)
+  licencaValida Boolean  @default(true)
+  ativo        Boolean   @default(true)
+  fotoUrl      String?
+  observacoes  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  clube          Clube           @relation(fields: [clubeId], references: [id])
+  graduacoes     Graduacao[]
+  inscricoes     Inscricao[]
+  presencas      Presenca[]
+  documentos     DocumentoAtleta[]
+  transferencias Transferencia[]
+
+  @@index([clubeId])
+}
+
+model Graduacao {
+  id        String   @id @default(uuid())
+  atletaId  String
+  kyu       Int
+  dan       Int      @default(0)
+  resultado String   // Aprovado | Reprovado
+  data      DateTime
+  notas     String?
+  exameId   String?
+  createdAt DateTime @default(now())
+
+  atleta    Atleta   @relation(fields: [atletaId], references: [id])
+  exame     Exame?   @relation(fields: [exameId], references: [id])
+
+  @@index([atletaId])
+}
+
+model Transferencia {
+  id               String   @id @default(uuid())
+  atletaId         String
+  clubeOrigemId    String
+  clubeDestinoId   String
+  data             DateTime
+  motivo           String?
+  createdAt        DateTime @default(now())
+
+  atleta           Atleta   @relation(fields: [atletaId], references: [id])
+
+  @@index([atletaId])
+}
+
+// ─── M3 — Treinadores ────────────────────────────────────────────
+
+model Treinador {
+  id             String    @id @default(uuid())
+  nome           String
+  dataNasc       DateTime?
+  numCC          String?
+  nif            String?
+  email          String?
+  telefone       String?
+  morada         String?
+  codigoPostal   String?
+  localidade     String?
+  numCedula      String    @unique
+  grau           String    // I | II | III | Sensei
+  dan            String?
+  graduacaoDan   String?
+  cedulaValidade DateTime?
+  ativo          Boolean   @default(true)
+  fotoUrl        String?
+  observacoes    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  clubes    TreinadorClube[]
+  formacoes FormacaoTreinador[]
+  licencas  Licenca[]
+}
+
+model TreinadorClube {
+  treinadorId String
+  clubeId     String
+  desde       DateTime @default(now())
+
+  treinador   Treinador @relation(fields: [treinadorId], references: [id])
+  clube       Clube     @relation(fields: [clubeId], references: [id])
+
+  @@id([treinadorId, clubeId])
+}
+
+model FormacaoTreinador {
+  id          String    @id @default(uuid())
+  treinadorId String
+  tipo        String    // WADA | ProtecaoMenores | PrimeirosSocorros | FormacaoContinua
+  entidade    String?
+  dataRealizacao DateTime?
+  validade    DateTime?
+  concluida   Boolean   @default(false)
+  certificadoUrl String?
+  createdAt   DateTime  @default(now())
+
+  treinador   Treinador @relation(fields: [treinadorId], references: [id])
+
+  @@index([treinadorId])
+}
+
+// ─── M4 — Competições ────────────────────────────────────────────
+
+model Competicao {
+  id             String   @id @default(uuid())
+  assocId        String
+  nome           String
+  data           DateTime
+  horaInicio     String?
+  local          String?
+  moradaLocal    String?
+  status         String   @default("EmPreparacao") // EmPreparacao | InscricoesAbertas | EmCurso | Concluido
+  compNum        String   @unique
+  descricao      String?
+  taxaInscricao  Float?
+  dataFimInscrip DateTime?
+  organizador    String?
+  emailOrg       String?
+  telefoneOrg    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  assoc      Associacao      @relation(fields: [assocId], references: [id])
+  categorias CategoriaComp[]
+  inscricoes Inscricao[]
+  escalas    EscalaArbitro[]
+  exames     Exame[]
+  diplomas   Diploma[]
+
+  @@index([assocId])
+}
+
+model CategoriaComp {
+  id           String   @id @default(uuid())
+  competicaoId String
+  nome         String
+  escalao      String
+  tipo         String   // Kata | Kumite
+  genero       String   @default("Misto") // Masculino | Feminino | Misto
+
+  competicao   Competicao  @relation(fields: [competicaoId], references: [id])
+  inscricoes   Inscricao[]
+
+  @@index([competicaoId])
+}
+
+model Inscricao {
+  id           String   @id @default(uuid())
+  competicaoId String
+  categoriaId  String
+  atletaId     String
+  estado       String   @default("Pendente") // Pendente | Validada | Rejeitada
+  resultado    String?  // 1 | 2 | 3 | Participante
+  pagamentoId  String?
+  createdAt    DateTime @default(now())
+
+  competicao   Competicao    @relation(fields: [competicaoId], references: [id])
+  categoria    CategoriaComp @relation(fields: [categoriaId], references: [id])
+  atleta       Atleta        @relation(fields: [atletaId], references: [id])
+
+  @@index([competicaoId])
+  @@index([atletaId])
+}
+
+// ─── M5 — Financeiro ─────────────────────────────────────────────
+
+model Pagamento {
+  id            String    @id @default(uuid())
+  clubeId       String
+  tipo          String    // Quota | TaxaExame | TaxaComp | Outro
+  valor         Float
+  estado        String    @default("Pendente") // Pago | Pendente | EmAtraso | Isento
+  referencia    String?
+  descricao     String?
+  dataPagamento DateTime?
+  dataVencimento DateTime?
+  reciboPdfUrl  String?
+  comprovativoUrl String?
+  anoRef        Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  clube         Clube     @relation(fields: [clubeId], references: [id])
+
+  @@index([clubeId])
+}
+
+// ─── M6 — Comunicação ────────────────────────────────────────────
+
+model Noticia {
+  id         String   @id @default(uuid())
+  assocId    String
+  tipo       String   // Noticia | Circular | Aviso | Regulamento
+  titulo     String
+  corpo      String
+  imagemUrl  String?
+  publicado  Boolean  @default(false)
+  urgente    Boolean  @default(false)
+  versao     String?
+  ficheiroPdfUrl String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  assoc      Associacao @relation(fields: [assocId], references: [id])
+
+  @@index([assocId])
+}
+
+// ─── M8 — Calendário e Treinos ───────────────────────────────────
+
+model Evento {
+  id        String   @id @default(uuid())
+  assocId   String?
+  nome      String
+  tipo      String   // Competicao | Exame | Formacao | Treino | Reuniao | Outro
+  data      DateTime
+  hora      String?
+  local     String?
+  descricao String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Presenca {
+  id        String   @id @default(uuid())
+  atletaId  String
+  clubeId   String
+  data      DateTime
+  presente  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  atleta    Atleta   @relation(fields: [atletaId], references: [id])
+  clube     Clube    @relation(fields: [clubeId], references: [id])
+
+  @@index([atletaId])
+  @@index([clubeId])
+}
+
+// ─── M9 — Arbitragem ─────────────────────────────────────────────
+
+model Arbitro {
+  id           String    @id @default(uuid())
+  clubeId      String?
+  nome         String
+  dataNasc     DateTime?
+  numCC        String?
+  nif          String?
+  email        String?
+  telefone     String?
+  morada       String?
+  codigoPostal String?
+  localidade   String?
+  nivel        String    // Local | Regional | Nacional
+  dan          String?
+  numCedula    String?   @unique
+  ativo        Boolean   @default(true)
+  fotoUrl      String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  licencas  Licenca[]
+  escalas   EscalaArbitro[]
+  formacoes FormacaoArbitro[]
+}
+
+model FormacaoArbitro {
+  id         String    @id @default(uuid())
+  arbitroId  String
+  tipo       String
+  entidade   String?
+  dataRealizacao DateTime?
+  validade   DateTime?
+  concluida  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+
+  arbitro    Arbitro   @relation(fields: [arbitroId], references: [id])
+
+  @@index([arbitroId])
+}
+
+model Licenca {
+  id          String    @id @default(uuid())
+  treinadorId String?
+  arbitroId   String?
+  tipo        String    @default("Arbitragem") // Arbitragem | Treino
+  nivel       String
+  validade    DateTime
+  ativa       Boolean   @default(true)
+  ficheiroPdfUrl String?
+  createdAt   DateTime  @default(now())
+
+  treinador   Treinador? @relation(fields: [treinadorId], references: [id])
+  arbitro     Arbitro?   @relation(fields: [arbitroId], references: [id])
+}
+
+model EscalaArbitro {
+  id           String   @id @default(uuid())
+  competicaoId String
+  arbitroId    String
+  funcao       String   // Principal | Mesa | Campo
+  confirmado   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  competicao   Competicao @relation(fields: [competicaoId], references: [id])
+  arbitro      Arbitro    @relation(fields: [arbitroId], references: [id])
+
+  @@index([competicaoId])
+}
+
+// ─── Documentos ──────────────────────────────────────────────────
+
+model DocumentoClube {
+  id        String    @id @default(uuid())
+  clubeId   String
+  tipo      String    // Estatutos | Ata | Seguro | Certidao | Outro
+  nome      String?
+  fileUrl   String?
+  validade  DateTime?
+  createdAt DateTime  @default(now())
+
+  clube     Clube     @relation(fields: [clubeId], references: [id])
+
+  @@index([clubeId])
+}
+
+model DocumentoAtleta {
+  id        String    @id @default(uuid())
+  atletaId  String
+  tipo      String    // AutorizacaoParental | CertidaoMedica | Seguro | FotoCC | Outro
+  nome      String?
+  fileUrl   String?
+  validade  DateTime?
+  createdAt DateTime  @default(now())
+
+  atleta    Atleta    @relation(fields: [atletaId], references: [id])
+
+  @@index([atletaId])
+}
+
+// ─── Exames ──────────────────────────────────────────────────────
+
+model Exame {
+  id           String    @id @default(uuid())
+  assocId      String?
+  titulo       String
+  data         DateTime
+  local        String?
+  competicaoId String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  assoc        Associacao? @relation(fields: [assocId], references: [id])
+  competicao   Competicao? @relation(fields: [competicaoId], references: [id])
+  graduacoes   Graduacao[]
+}
+
+// ─── Diplomas e Rankings ──────────────────────────────────────────
+
+model Diploma {
+  id           String   @id @default(uuid())
+  competicaoId String
+  atletaId     String
+  categoria    String
+  lugar        String   // 1 | 2 | 3 | Participante
+  pdfUrl       String?
+  createdAt    DateTime @default(now())
+
+  competicao   Competicao @relation(fields: [competicaoId], references: [id])
+
+  @@index([competicaoId])
+}
+
+model Ranking {
   id          String   @id @default(uuid())
-  name        String
-  order       Int
-  colorHex    String
-  createdAt   DateTime @default(now())
+  atletaId    String
+  temporada   Int      // ex: 2025
+  pontos      Int      @default(0)
+  posicao     Int?
+  escalao     String?
   updatedAt   DateTime @updatedAt
 
-  rankHistory MemberRankHistory[]
-  exams       Exam[]
-
-  @@unique([order])
+  @@unique([atletaId, temporada])
+  @@index([atletaId])
 }
 
-model Exam {
-  id          String     @id @default(uuid())
-  title       String
-  date        DateTime
-  location    String?
-  beltRankId  String
-  beltRank    BeltRank   @relation(fields: [beltRankId], references: [id])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  participants Member[] @relation("ExamParticipants")
-}
-
-model MemberRankHistory {
-  id          String   @id @default(uuid())
-  memberId    String
-  beltRankId  String
-  achievedAt  DateTime
-  notes       String?
-
-  member      Member   @relation(fields: [memberId], references: [id])
-  beltRank    BeltRank @relation(fields: [beltRankId], references: [id])
-
-  @@index([memberId])
-  @@index([beltRankId])
-}
+// ─── Automação (existente) ────────────────────────────────────────
 
 model Flow {
   id          String   @id @default(uuid())
@@ -90,32 +513,32 @@ model Flow {
 }
 
 model FlowRun {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   flowId     String
   status     String
   input      Json
   output     Json?
   logs       Json?
-  startedAt  DateTime @default(now())
+  startedAt  DateTime  @default(now())
   finishedAt DateTime?
 
-  flow       Flow     @relation(fields: [flowId], references: [id])
+  flow       Flow      @relation(fields: [flowId], references: [id])
 
   @@index([flowId])
 }
 
 model Template {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   description String?
-  status      String   @default("draft")
+  status      String    @default("draft")
   content     Json
   submittedAt DateTime?
   ownerId     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  owner       User     @relation(fields: [ownerId], references: [id])
+  owner       User      @relation(fields: [ownerId], references: [id])
 
   @@index([ownerId])
 }

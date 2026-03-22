@@ -3,6 +3,6 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "npm run build && npm run prisma:generate && npm run prisma:migrate && node dist/main.js"
+    "startCommand": "npm run build && npm run prisma:generate && npx prisma db push && npm run seed && node dist/main.js"
   }
 }

@@ -39,7 +39,7 @@ export default function SignupPage() {
         <div className="auth-brand-grid" aria-hidden="true" />
         <div className="auth-brand-kanji" aria-hidden="true">入門</div>
         <div className="auth-brand-inner">
-          <img src="/assets/logo.svg" className="auth-logo" alt="ASKBI" />
+          <img src="/assets/logo-assoc.png" className="auth-logo" alt="ASKBI" />
           <div className="auth-brand-name">Associação Shotokan</div>
           <div className="auth-brand-sub">Nova conta</div>
           <div className="auth-gold-sep" style={{ alignSelf: 'center', margin: '16px 0' }} />
